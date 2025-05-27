@@ -1,39 +1,46 @@
 # Multi-Step User Profile Update Form
 
 ## Project Overview
+
 This project is my submission for the Junior Developer (MERN) role assessment. It implements a multi-step user profile update form with frontend and backend validation, dynamic fields, file upload functionality, and real-time validation.
 
 ## Features Implemented
 
 ### Multi-Step Form Process
+
 - Step 1: Personal Information
-- Step 2: Professional Details 
+- Step 2: Professional Details
 - Step 3: Location Information
-- Step 4: Preferences
 - Summary page before final submission
 
 ### Form Validations (No third-party libraries)
+
 - Frontend validation using custom JavaScript
 - Backend validation using Node.js/Express
 - Real-time feedback to users
 
 ### Dynamic Field Behavior
+
 - Conditional field for gender (shows textbox when "Other" is selected)
 - Show/Hide "Company Details" based on "Profession" selection
 - Country/State/City dropdowns with dynamic population
 - Reset address fields when country changes
 
 ### File Upload
+
 - Profile picture upload with size restrictions (≤2MB)
 - File type validation (JPG/PNG only)
 - Live image preview
+- Using Cloudinary
 
 ### Password Management
+
 - Current password verification
 - New password strength requirements (8+ chars, 1 special char, 1 number)
 - Password strength meter with real-time feedback
 
 ### API Integration
+
 - Username availability check
 - Country/State/City data fetching
 - Form data submission to MongoDB
@@ -41,11 +48,13 @@ This project is my submission for the Junior Developer (MERN) role assessment. I
 ## Technologies Used
 
 ### Frontend
+
 - React.js for UI components
 - CSS for styling
 - Custom form validation logic
 
 ### Backend
+
 - Node.js with Express
 - MongoDB for data storage
 - Mongoose for database interactions
@@ -77,50 +86,36 @@ npm run dev
 ```
 
 ## Environment Variables
+
 Create a `.env` file in the root directory with the following variables:
 
 ```
 PORT=5000
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME='Your cloud name'  
+CLOUDINARY_API_KEY='Your Api key'
+CLOUDINARY_API_SECRET='Your_Secret'
 ```
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/countries | Get all countries |
-| GET | /api/states/:countryId | Get states for a country |
-| GET | /api/cities/:stateId | Get cities for a state |
-| GET | /api/users/check-username/:username | Check username availability |
-| POST | /api/users/profile | Submit user profile data |
-| POST | /api/upload | Upload profile picture |
-
-## Project Structure
-```
-├── client/                # React frontend
-│   ├── public/            # Static files
-│   ├── src/               # Source files
-│   │   ├── components/    # React components
-│   │   ├── pages/         # Page components
-│   │   ├── validation/    # Form validation logic
-│   │   └── App.js         # Main application
-├── server/                # Node.js backend
-│   ├── controllers/       # API controllers
-│   ├── models/            # Mongoose models
-│   ├── routes/            # API routes
-│   ├── validation/        # Server-side validation
-│   └── server.js          # Server entry point
-├── .env                   # Environment variables
-├── package.json           # Project dependencies
-└── README.md              # Project documentation
-```
+| Method | Endpoint                            | Description                 |
+| ------ | ----------------------------------- | --------------------------- |
+| GET    | /api/countries                      | Get all countries           |
+| GET    | /api/states/:countryId              | Get states for a country    |
+| GET    | /api/cities/:stateId                | Get cities for a state      |
+| GET    | /api/users/check-username/:username | Check username availability |
+| POST   | /api/users/profile                  | Submit user profile data    |
+| POST   | /api/upload                         | Upload profile picture      |
 
 ## Live Demo
-[View Live Demo](https://your-deployed-app-url.com)
+
+[View Live Demo](https://taskmultilevel.netlify.app/)
 
 ## GitHub Repository
-[View Source Code](https://github.com/your-username/multi-step-profile-form)
+
+[View Source Code](https://github.com/arshpreetsiingh/task)
 
 ---
 
