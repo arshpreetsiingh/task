@@ -23,13 +23,13 @@ const Step3LocationInfo = ({ formData, setFormData, nextStep, prevStep }) => {
 
   // Remove spaces in URLs and update to match backend routes
 useEffect(() => { 
-  fetchData('countries', 'http://localhost:5000/api/countries'); 
+  fetchData('countries', 'https://task-dd4s.onrender.com/api/countries'); 
 }, [setFormData]);
 
 // When country changes, fetch states and reset state/city
 useEffect(() => {
   if (formData.country) {
-    fetchData('states', `http://localhost:5000/api/states/${formData.country}`);
+    fetchData('states', `https://task-dd4s.onrender.com/api/states/${formData.country}`);
     setFormData(prev => ({ ...prev, state: '', city: '' }));
   }
 }, [formData.country, setFormData]);
@@ -37,7 +37,7 @@ useEffect(() => {
 // When state changes, fetch cities and reset city
 useEffect(() => {
   if (formData.state) {
-    fetchData('cities', `http://localhost:5000/api/cities/${formData.state}`);
+    fetchData('cities', `https://task-dd4s.onrender.com/api/cities/${formData.state}`);
     setFormData(prev => ({ ...prev, city: '' }));
   }
 }, [formData.state, setFormData]);

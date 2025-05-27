@@ -85,7 +85,7 @@ const Step1PersonalInfo = ({ formData, setFormData, nextStep }) => {
 
   const checkUsernameAvailability = async (username) => {
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/check-username?username=${username}`);
+      const { data } = await axios.get(`https://task-dd4s.onrender.com/api/check-username?username=${username}`);
       setUsernameAvailable(data.available);
       if (!data.available) setErrors(prev => ({ ...prev, username: 'Username is already taken' }));
     } catch {

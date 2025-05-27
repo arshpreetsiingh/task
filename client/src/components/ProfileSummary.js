@@ -52,7 +52,7 @@ const ProfileSummary = ({ formData, prevStep, resetForm }) => {
             if (formData.profilePhoto) profileData.append('profilePhoto', formData.profilePhoto);
 
 
-            await axios.post('http://localhost:5000/api/profile', profileData, {
+            await axios.post('https://task-dd4s.onrender.com/api/profile', profileData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
