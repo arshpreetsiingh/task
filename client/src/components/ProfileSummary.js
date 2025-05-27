@@ -1,0 +1,126 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const ProfileSummary = ({ formData, prevStep, resetForm }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const formatDate = date =>
+    date ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+
+  const renderPhoto = () => {
+    if (!formData.profilePhoto) return null;
+    const src = typeof formData.profilePhoto === 'string'
+      ? formData.profilePhoto
+      : URL.createObjectURL(formData.profilePhoto);
+    return <img src={src} alt="Profile" className="photo-preview" />;
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      const profileData = new FormData();
+      // Include all form data with proper handling
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key !== 'profilePhoto') {
+          // Make sure we're sending empty strings as empty strings, not "Not provided"
+          profileData.append(key, value || '');
+        }
+      });
+      
+      // Handle profile photo separately
+      if (formData.profilePhoto) profileData.append('profilePhoto', formData.profilePhoto);
+
+      // Remove the extra space in the URL
+      await axios.post('http://localhost:5000/api/profile', profileData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      setSubmitSuccess(true);
+      setTimeout(resetForm, 3000);
+    } catch (err) {
+      console.error('Submit error:', err);
+      setSubmitError(err.response?.data?.message || 'Error submitting profile. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (submitSuccess) {
+    return (
+      <div className="step-container success-container">
+        <h2>Profile Updated Successfully!</h2>
+        <p>Your profile has been saved to our database.</p>
+        <button onClick={resetForm} className="start-over-button">Start Over</button>
+      </div>
+    );
+  }
+
+  const SummaryItem = ({ label, value }) => (
+    <p><strong>{label}:</strong> {value || 'Not provided'}</p>
+  );
+
+  return (
+    <div className="step-container summary-container">
+      <h2>Review Your Information</h2>
+      {submitError && <div className="error-message"><p>{submitError}</p></div>}
+
+      <div className="summary-content">
+        <div className="summary-section">
+          <h3>Personal Information</h3>
+          {renderPhoto()}
+          <div className="summary-details">
+            <SummaryItem label="Full Name" value={formData.fullName} />
+            <SummaryItem label="Username" value={formData.username} />
+            <SummaryItem label="Date of Birth" value={formatDate(formData.dateOfBirth)} />
+            <SummaryItem label="Gender" value={
+              formData.gender === 'Other' && formData.customGender
+                ? `Other (${formData.customGender})`
+                : formData.gender
+            } />
+            <SummaryItem label="Password" value={formData.newPassword ? '••••••••' : 'Not changed'} />
+          </div>
+        </div>
+
+        <div className="summary-section">
+          <h3>Professional Details</h3>
+          <div className="summary-details">
+            <SummaryItem label="Profession" value={formData.profession} />
+            {formData.profession === 'Entrepreneur' && (
+              <>
+                <SummaryItem label="Company Name" value={formData.companyName} />
+                <SummaryItem label="Company Size" value={formData.companySize} />
+                <SummaryItem label="Industry" value={formData.industry} />
+              </>
+            )}
+            <SummaryItem label="Address" value={formData.addressLine1} />
+            {formData.addressLine2 && <SummaryItem label="Address Line 2" value={formData.addressLine2} />}
+          </div>
+        </div>
+
+        <div className="summary-section">
+          <h3>Location & Preferences</h3>
+          <div className="summary-details">
+            {/* Use the direct country value instead of countryName */}
+            <SummaryItem label="Country" value={formData.country} />
+            <SummaryItem label="State" value={formData.state} />
+            <SummaryItem label="City" value={formData.city} />
+            <SummaryItem label="Subscription Plan" value={formData.subscriptionPlan} />
+            <SummaryItem label="Newsletter" value={formData.newsletter === false ? 'No' : 'Yes'} />
+          </div>
+        </div>
+      </div>
+
+      <div className="button-group">
+        <button onClick={prevStep} className="prev-button" disabled={isSubmitting}>Previous</button>
+        <button onClick={handleSubmit} className="submit-button" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit Profile'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ProfileSummary;

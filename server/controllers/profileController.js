@@ -43,7 +43,8 @@ exports.createProfile = async (req, res) => {
 
 // Check if username is available
 exports.checkUsername = async (req, res) => {
-  const user = await UserProfile.findOne({ username: req.params.username });
+  const username = req.query.username; // instead of req.params.username
+  const user = await UserProfile.findOne({ username });
   if (user) return res.json({ available: false });
   res.json({ available: true });
 };

@@ -11,7 +11,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 router.post('/profile', upload.single('profilePhoto'), createProfile);
-router.get('/check-username/:username', checkUsername);
+router.get('/check-username', checkUsername);
 router.get('/countries', getCountries);
 router.get('/states/:country', getStates);
 router.get('/cities/:state', getCities);
