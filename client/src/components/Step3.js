@@ -22,23 +22,25 @@ const Step3LocationInfo = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   // Remove spaces in URLs and update to match backend routes
-  useEffect(() => { 
-    fetchData('countries', 'http://localhost:5000/api/countries'); 
-  }, []);
-  
-  useEffect(() => {
-    if (formData.country) {
-      fetchData('states', `http://localhost:5000/api/states/${formData.country}`);
-      setFormData(prev => ({ ...prev, state: '', city: '' }));
-    }
-  }, [formData.country]);
-  
-  useEffect(() => {
-    if (formData.state) {
-      fetchData('cities', `http://localhost:5000/api/cities/${formData.state}`);
-      setFormData(prev => ({ ...prev, city: '' }));
-    }
-  }, [formData.state]);
+useEffect(() => { 
+  fetchData('countries', 'http://localhost:5000/api/countries'); 
+}, [setFormData]);
+
+// When country changes, fetch states and reset state/city
+useEffect(() => {
+  if (formData.country) {
+    fetchData('states', `http://localhost:5000/api/states/${formData.country}`);
+    setFormData(prev => ({ ...prev, state: '', city: '' }));
+  }
+}, [formData.country, setFormData]);
+
+// When state changes, fetch cities and reset city
+useEffect(() => {
+  if (formData.state) {
+    fetchData('cities', `http://localhost:5000/api/cities/${formData.state}`);
+    setFormData(prev => ({ ...prev, city: '' }));
+  }
+}, [formData.state, setFormData]);
 
   const handleChange = ({ target: { name, value, type, checked } }) => {
     setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
