@@ -1,3 +1,7 @@
+# Frequent Research Fieldwork Solutions Pvt. Ltd
+
+![Frequent Research Logo](https://i.imgur.com/aILJiQ6.png)
+
 # Multi-Step User Profile Update Form
 
 ## Project Overview

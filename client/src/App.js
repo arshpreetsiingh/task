@@ -29,6 +29,14 @@ const App = () => {
   return (
     <div className="app-container">
       <div className="form-container">
+        <div className="company-header">
+        <img 
+          src="./unnamed.jpg" 
+          alt="Frequent Research Logo" 
+          className="company-logo"
+        />
+        <h3 className="company-name">Frequent Research Fieldwork Solutions Pvt. Ltd</h3>
+      </div>
         <div className="form-progress">
           <div className="progress-bar">
             <div className="progress-value" style={{ width: `${progress}%` }} />

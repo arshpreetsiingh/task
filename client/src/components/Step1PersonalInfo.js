@@ -135,6 +135,9 @@ const Step1PersonalInfo = ({ formData, setFormData, nextStep }) => {
 
   return (
     <div className="step-container">
+      {/* Company Header */}
+      
+      
       <h2>Step 1: Personal Information</h2>
       <form onSubmit={handleSubmit}>
         {/* Photo Upload Section */}
