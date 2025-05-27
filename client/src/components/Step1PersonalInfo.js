@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 const Step1PersonalInfo = ({ formData, setFormData, nextStep }) => {
@@ -7,10 +7,30 @@ const Step1PersonalInfo = ({ formData, setFormData, nextStep }) => {
   const [usernameAvailable, setUsernameAvailable] = useState(true);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const genderOptions = ['Male', 'Female', 'Other'];
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   const today = new Date().toISOString().split('T')[0];
 
-  const handleChange = ({ target: { name, value } }) => {
+  // Generate preview URL when file is selected
+  useEffect(() => {
+    if (formData.profilePhoto && formData.profilePhoto instanceof File) {
+      const objectUrl = URL.createObjectURL(formData.profilePhoto);
+      setPhotoPreview(objectUrl);
+
+      // Clean up URL when component unmounts or file changes
+      return () => URL.revokeObjectURL(objectUrl);
+    } else if (typeof formData.profilePhoto === 'string' && formData.profilePhoto) {
+      setPhotoPreview(formData.profilePhoto);
+    }
+  }, [formData.profilePhoto]);
+
+  const handleChange = ({ target: { name, value, type, files } }) => {
+    if (type === 'file') {
+      // Handle file input separately
+      return;
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
 
@@ -21,6 +41,46 @@ const Step1PersonalInfo = ({ formData, setFormData, nextStep }) => {
     }
 
     if (name === 'newPassword') calculatePasswordStrength(value);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file type
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        setErrors(prev => ({
+          ...prev,
+          profilePhoto: 'Please select an image file (JPEG, PNG, or GIF)'
+        }));
+        return;
+      }
+
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors(prev => ({
+          ...prev,
+          profilePhoto: 'Image size should be less than 5MB'
+        }));
+        return;
+      }
+
+      // Clear error and set file to form data
+      setErrors(prev => ({ ...prev, profilePhoto: '' }));
+      setFormData(prev => ({ ...prev, profilePhoto: file }));
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
+  const removePhoto = () => {
+    setFormData(prev => ({ ...prev, profilePhoto: null }));
+    setPhotoPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const checkUsernameAvailability = async (username) => {
@@ -77,6 +137,43 @@ const Step1PersonalInfo = ({ formData, setFormData, nextStep }) => {
     <div className="step-container">
       <h2>Step 1: Personal Information</h2>
       <form onSubmit={handleSubmit}>
+        {/* Photo Upload Section */}
+        <div className="photo-upload-section">
+          <div 
+            className={`photo-upload ${photoPreview ? 'has-photo' : ''}`}
+            onClick={triggerFileInput}
+          >
+            {photoPreview ? (
+              <img src={photoPreview} alt="Profile Preview" className="photo-preview" />
+            ) : (
+              <div className="upload-placeholder">
+                <i className="upload-icon">📷</i>
+                <span>Upload Photo</span>
+              </div>
+            )}
+          </div>
+          <input 
+            type="file" 
+            id="profilePhoto"
+            name="profilePhoto"
+            accept="image/*"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+          />
+          
+          {photoPreview && (
+            <button 
+              type="button" 
+              className="remove-photo-btn"
+              onClick={removePhoto}
+            >
+              Remove Photo
+            </button>
+          )}
+          {errors.profilePhoto && <span className="error-text">{errors.profilePhoto}</span>}
+        </div>
+
         {/* Full Name */}
         <InputField label="Full Name*" name="fullName" value={formData.fullName} error={errors.fullName} onChange={handleChange} />
 
@@ -124,7 +221,6 @@ const Step1PersonalInfo = ({ formData, setFormData, nextStep }) => {
   );
 };
 
-// Reusable Input Field Component
 const InputField = ({ type = "text", label, name, value, onChange, error, ...rest }) => (
   <div className="form-group">
     <label>{label}</label>

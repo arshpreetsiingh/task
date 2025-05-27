@@ -7,9 +7,9 @@ const {
   getStates,
   getCities
 } = require('../controllers/profileController');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const { upload } = require('../config/cloudinary');
 
+// Replace multer upload with cloudinary upload
 router.post('/profile', upload.single('profilePhoto'), createProfile);
 router.get('/check-username', checkUsername);
 router.get('/countries', getCountries);
