@@ -1,109 +1,127 @@
-# Task Project
+# Multi-Step User Profile Update Form
 
-## Overview
-This project is a task management application designed to streamline workflow and improve productivity. It allows users to create, manage, and track tasks across teams and projects.
+## Project Overview
+This project is my submission for the Junior Developer (MERN) role assessment. It implements a multi-step user profile update form with frontend and backend validation, dynamic fields, file upload functionality, and real-time validation.
 
-## Features
-- Task creation and assignment
-- Priority and deadline management
-- Progress tracking
-- Team collaboration tools
-- Reporting and analytics
-- Mobile-friendly interface
+## Features Implemented
 
-## Installation
+### Multi-Step Form Process
+- Step 1: Personal Information
+- Step 2: Professional Details 
+- Step 3: Location Information
+- Step 4: Preferences
+- Summary page before final submission
+
+### Form Validations (No third-party libraries)
+- Frontend validation using custom JavaScript
+- Backend validation using Node.js/Express
+- Real-time feedback to users
+
+### Dynamic Field Behavior
+- Conditional field for gender (shows textbox when "Other" is selected)
+- Show/Hide "Company Details" based on "Profession" selection
+- Country/State/City dropdowns with dynamic population
+- Reset address fields when country changes
+
+### File Upload
+- Profile picture upload with size restrictions (≤2MB)
+- File type validation (JPG/PNG only)
+- Live image preview
+
+### Password Management
+- Current password verification
+- New password strength requirements (8+ chars, 1 special char, 1 number)
+- Password strength meter with real-time feedback
+
+### API Integration
+- Username availability check
+- Country/State/City data fetching
+- Form data submission to MongoDB
+
+## Technologies Used
+
+### Frontend
+- React.js for UI components
+- CSS for styling
+- Custom form validation logic
+
+### Backend
+- Node.js with Express
+- MongoDB for data storage
+- Mongoose for database interactions
+- Multer for file uploads
+
+## Installation and Setup
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-organization/task.git
+git clone https://github.com/your-username/multi-step-profile-form.git
 
-# Navigate to the project directory
-cd task
+# Navigate to project directory
+cd multi-step-profile-form
 
-# Install dependencies
+# Install dependencies for backend
 npm install
 
-# Start the application
-npm start
+# Navigate to client directory
+cd client
+
+# Install dependencies for frontend
+npm install
+
+# Return to root directory
+cd ..
+
+# Run development server (both frontend and backend)
+npm run dev
 ```
 
-## Configuration
+## Environment Variables
+Create a `.env` file in the root directory with the following variables:
 
-The application can be configured through the `.env` file. Copy the example configuration:
-
-```bash
-cp .env.example .env
+```
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
 ```
 
-Then edit the `.env` file with your specific settings.
+## API Endpoints
 
-## Usage
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/countries | Get all countries |
+| GET | /api/states/:countryId | Get states for a country |
+| GET | /api/cities/:stateId | Get cities for a state |
+| GET | /api/users/check-username/:username | Check username availability |
+| POST | /api/users/profile | Submit user profile data |
+| POST | /api/upload | Upload profile picture |
 
-After installation, access the application at `http://localhost:3000`. The dashboard provides an overview of all tasks and their statuses.
-
-### User Roles
-- **Administrators**: Full system access
-- **Project Managers**: Create projects and assign tasks
-- **Team Members**: Update task status and communicate within tasks
-
-## Development
-
-### Prerequisites
-- Node.js v14 or higher
-- MongoDB v4.4+
-- Redis (for caching)
-
-### Testing
-
-```bash
-# Run all tests
-npm test
-
-# Run specific test suite
-npm test -- --testPathPattern=auth
+## Project Structure
+```
+├── client/                # React frontend
+│   ├── public/            # Static files
+│   ├── src/               # Source files
+│   │   ├── components/    # React components
+│   │   ├── pages/         # Page components
+│   │   ├── validation/    # Form validation logic
+│   │   └── App.js         # Main application
+├── server/                # Node.js backend
+│   ├── controllers/       # API controllers
+│   ├── models/            # Mongoose models
+│   ├── routes/            # API routes
+│   ├── validation/        # Server-side validation
+│   └── server.js          # Server entry point
+├── .env                   # Environment variables
+├── package.json           # Project dependencies
+└── README.md              # Project documentation
 ```
 
-## Deployment
+## Live Demo
+[View Live Demo](https://your-deployed-app-url.com)
 
-The application supports deployment on:
-- Docker containers
-- AWS Elastic Beanstalk
-- Heroku
+## GitHub Repository
+[View Source Code](https://github.com/your-username/multi-step-profile-form)
 
-Detailed deployment instructions are available in the `DEPLOYMENT.md` file.
+---
 
-## Technical Documentation
-
-API documentation is available at `/api/docs` when running the development server.
-
-## Business Value
-
-- **Efficiency**: Reduces time spent on task management by 40%
-- **Transparency**: Provides real-time visibility into project progress
-- **Accountability**: Clear assignment and tracking of responsibilities
-- **Data-Driven**: Analytics to identify bottlenecks and optimize workflows
-
-## Roadmap
-
-- Q3 2023: Integration with popular calendar applications
-- Q4 2023: Advanced reporting features
-- Q1 2024: Mobile application release
-
-## Support and Maintenance
-
-Our team provides:
-- 24/7 technical support
-- Regular security updates
-- Quarterly feature releases
-- Custom development for enterprise clients
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contact
-
-For more information, please contact:
-- **Technical Support**: support@example.com
-- **Sales Inquiries**: sales@example.com
-- **Partnership Opportunities**: partners@example.com
+Developed as part of the technical assessment for the Junior Developer (MERN) position.
